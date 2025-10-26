@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Këngët e Ilirjan Grabovaj</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f0f2f5; margin:0; padding:0; }
+header { background:#1a73e8; color:white; padding:25px 0; text-align:center; }
+header img { width:120px; height:120px; border-radius:50%; border:3px solid white; margin-bottom:10px; object-fit:cover; }
+header h1 { margin:10px 0 5px 0; }
+header p { margin:0; font-size:14px; }
+main { max-width:1000px; margin:20px auto; padding:0 15px; }
+#search, #newTitle, #newArtist, #newLink { display:block; margin:10px auto; padding:10px; width:90%; max-width:500px; font-size:16px; border-radius:8px; border:1px solid #ccc; }
+button { display:block; margin:10px auto 20px auto; padding:10px 20px; font-size:16px; border:none; border-radius:8px; background:#1a73e8; color:white; cursor:pointer; }
+button:hover { background:#155ab6; }
+.cards-container { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap:15px; margin-top:20px; }
+.song-card { background:white; padding:15px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); transition:0.2s; }
+.song-card:hover { transform:translateY(-5px); box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+.song-card h3 { margin:0 0 5px 0; color:#333; }
+.song-card p { margin:0 0 10px 0; color:#555; }
+.song-card a { color:#1a73e8; text-decoration:none; font-weight:bold; }
+.song-card a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<header>
+<img src="https://via.placeholder.com/120" alt="Ilirjan Grabovaj">
+<h1>Ilirjan Grabovaj</h1>
+<p>Autor i teksteve të shumë këngëve popullore shqiptare</p>
+</header>
+
+<main>
+<input type="text" id="search" placeholder="Kërko këngë ose artist...">
+
+<div>
+<input type="text" id="newTitle" placeholder="Titulli i ri">
+<input type="text" id="newArtist" placeholder="Artist">
+<input type="text" id="newLink" placeholder="Link për tekstin">
+<button id="addSongBtn">Shto këngë të re</button>
+</div>
+
+<div class="cards-container" id="song-list"></div>
+</main>
+
+<script>
+let songs = [
+{ title: "Esmerka", artist: "Teo Dumani", link: "https://teksteshqip.com/" },
+{ title: "Perëndeshë e detit", artist: "Dea Hysenaj", link: "https://teksteshqip.com/" },
+{ title: "Vera", artist: "Maria Ramushaj", link: "https://teksteshqip.com/maria-ramushaj/teksti/1997078" },
+{ title: "Amantia me Gure Serma", artist: "Marres Kontian Alliaj", link: "https://teksteshqip.com/" }
+];
+
+const songList = document.getElementById('song-list');
+const searchInput = document.getElementById('search');
+const addBtn = document.getElementById('addSongBtn');
+
+function displaySongs(filter='') {
+  songList.innerHTML='';
+  const filtered = songs.filter(song => song.title.toLowerCase().includes(filter.toLowerCase()) || song.artist.toLowerCase().includes(filter.toLowerCase()));
+  filtered.forEach(song => {
+    const div = document.createElement('div');
+    div.className='song-card';
+    div.innerHTML=`<h3>${song.title}</h3><p>${song.artist}</p><a href="${song.link}" target="_blank">Shiko tekstin</a>`;
+    songList.appendChild(div);
+  });
+}
+
+searchInput.addEventListener('input', ()=>displaySongs(searchInput.value));
+
+addBtn.addEventListener('click', ()=>{
+  const title=document.getElementById('newTitle').value.trim();
+  const artist=document.getElementById('newArtist').value.trim();
+  const link=document.getElementById('newLink').value.trim();
+  if(title && artist && link){
+    songs.push({title, artist, link});
+    document.getElementById('newTitle').value='';
+    document.getElementById('newArtist').value='';
+    document.getElementById('newLink').value='';
+    displaySongs(searchInput.value);
+  } else {
+    alert("Plotëso të gjitha fushat për të shtuar këngën!");
+  }
+});
+
+displaySongs();
+</script>
+
+</body>
+</html>
